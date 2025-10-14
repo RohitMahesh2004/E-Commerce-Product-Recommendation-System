@@ -229,7 +229,7 @@ npm run dev
 
 4. Open browser at `http://localhost:3000`
 
-##  Usage
+## 🧠 Usage
 
 ### 1. Search Amazon Products
 - Enter a product name in the search bar (e.g., "wireless earbuds")
@@ -376,7 +376,7 @@ REQUIRED OUTPUT FORMAT (JSON):
 }
 ```
 
-### Real-World Output Example
+### Real-World Example
 
 Based on the uploaded catalog, the system displays:
 
@@ -391,7 +391,7 @@ Based on the uploaded catalog, the system displays:
 - OnePlus Nord Buds 2r (₹2,299)
 - boAt Airdopes 141 (₹1,299)
 
-## 🔑 Key Technologies
+## 🔑 Key TechStack
 
 - **FastAPI**: High-performance async Python backend
 - **Gemini API**: Google's LLM for natural language generation
@@ -415,21 +415,9 @@ Based on the uploaded catalog, the system displays:
 - CORS configured for frontend-backend communication
 - Rate limiting on API endpoints
 
-## 🤝 Contributing
-
-Contributions welcome! Please follow:
-1. Fork the repository
-2. Create feature branch
-3. Commit changes
-4. Push to branch
-5. Open pull request
-
 ## 📄 License
 
 MIT License - see LICENSE file for details
 
-## 🐛 Known Issues
 
-- Large catalogs (>10,000 products) may require additional optimization
-- Image loading depends on SerpAPI rate limits
 
