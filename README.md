@@ -139,53 +139,22 @@ The `kg_builder.py` module transforms product catalogs into semantic knowledge g
 }
 ```
 
-### Gemini API Integration (`gemini_client.py`)
+### Gemini API Integration
 
-The core LLM analysis is powered by Google's Gemini 2.5 Flash model:
+The `gemini_client.py` module powers intelligent product analysis using Google's Gemini 2.5 Flash model. The system:
 
-```python
-import os
-from google import genai
+**Processing Pipeline:**
+1. **Catalog Loading**: Accepts CSV, Excel, or JSON product files
+2. **Data Optimization**: Limits analysis to 5 products and essential columns to avoid token overflow
+3. **Prompt Engineering**: Constructs structured prompts with product details
+4. **LLM Analysis**: Gemini evaluates products based on value, features, and ratings
+5. **Structured Output**: Returns JSON with best product, reasoning, and alternatives
 
-# Initialize Gemini Client
-client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
-
-def analyze_catalog(file_path: str) -> dict:
-    """
-    Analyzes product catalog and returns:
-    - Best product recommendation
-    - Data-driven reasoning (3 key benefits)
-    - Alternative product suggestions
-    """
-    
-    # Load and prepare catalog (CSV/Excel/JSON)
-    df = pd.read_csv(file_path)
-    
-    # Limit to 5 products to avoid token overflow
-    if len(df) > 5:
-        df = df.head(5)
-    
-    # Build structured prompt with product details
-    prompt = build_analysis_prompt(df)
-    
-    # Call Gemini with JSON output format
-    response = client.models.generate_content(
-        model="gemini-2.5-flash",
-        contents=prompt,
-        config={
-            "temperature": 0.3,
-            "response_mime_type": "application/json"
-        }
-    )
-    
-    return parse_gemini_response(response)
-```
-
-**Key Features:**
-- Automatic catalog format detection (CSV, Excel, JSON)
-- Token-optimized by limiting to essential columns and 5 products
-- Structured JSON output for easy parsing
-- Error handling with detailed logging
+**Configuration:**
+- **Model**: Gemini 2.5 Flash for fast, accurate analysis
+- **Temperature**: 0.3 for consistent, factual recommendations
+- **Output Format**: JSON for seamless frontend integration
+- **Error Handling**: Comprehensive validation and fallback mechanisms
 
 ### Vector Embeddings
 
@@ -310,29 +279,67 @@ response = client.models.generate_content(
 
 ### Example Catalog Analysis Prompt
 
-The system uses **Gemini 2.5 Flash** to analyze uploaded product catalogs with the following prompt structure:
+The system uses **Gemini 2.5 Flash** with a **Knowledge Graph-enhanced RAG approach**. When a catalog is uploaded, the LLM receives enriched context derived from the knowledge graph:
 
 ```
-Analyze these products and recommend the best one based on VALUE, FEATURES, and RATING.
+You are analyzing a product catalog through a knowledge graph representation. 
+The graph captures product entities, their attributes, feature relationships, 
+and competitive positioning.
 
-1. name: Realme Buds Air 5 Pro | price: 3499 | rating: 4.1 | description: 50dB ANC, 45ms low latency...
-2. name: boAt Airdopes 141 | price: 1299 | rating: 4.0 | description: 42H playback, ENx tech...
-3. name: OnePlus Nord Buds 2r | price: 2299 | rating: 4.2 | description: 12.4mm drivers, 38H battery...
-4. name: Sony WF-C500 | price: 4999 | rating: 4.3 | description: DSEE audio, IPX4, 20H battery...
-5. name: JBL Tune 130NC TWS | price: 5999 | rating: 4.2 | description: Active NC, 40H playback...
+KNOWLEDGE GRAPH CONTEXT:
+---
+Nodes (Products):
+• Realme Buds Air 5 Pro [₹3499, Rating: 4.1/5]
+  → Features: {50dB ANC, 45ms latency, 38H battery, Hi-Res audio}
+  → Category: Premium TWS Earbuds
+  → Price Segment: Mid-range
 
-Provide compelling, data-driven reasoning with specific numbers and comparisons. 
+• boAt Airdopes 141 [₹1299, Rating: 4.0/5]
+  → Features: {42H playback, ENx tech, 8mm drivers}
+  → Category: Budget TWS Earbuds
+  → Price Segment: Entry-level
+
+• OnePlus Nord Buds 2r [₹2299, Rating: 4.2/5]
+  → Features: {12.4mm drivers, 38H battery, IP55}
+  → Category: Mid-range TWS Earbuds
+  → Price Segment: Mid-range
+
+• Sony WF-C500 [₹4999, Rating: 4.3/5]
+  → Features: {DSEE audio, IPX4, 20H battery}
+  → Category: Premium TWS Earbuds
+  → Price Segment: Premium
+
+• JBL Tune 130NC TWS [₹5999, Rating: 4.2/5]
+  → Features: {Active NC, 40H playback, 4-mic setup}
+  → Category: Premium TWS Earbuds
+  → Price Segment: Premium
+
+Relationships:
+• "Realme Buds Air 5 Pro" --[better_value_than]--> "Sony WF-C500"
+• "Realme Buds Air 5 Pro" --[has_feature]--> "50dB ANC"
+• "Realme Buds Air 5 Pro" --[competes_with]--> "OnePlus Nord Buds 2r"
+• "boAt Airdopes 141" --[budget_alternative_to]--> "Realme Buds Air 5 Pro"
+---
+
+ANALYSIS TASK:
+Using the knowledge graph context above, analyze the semantic relationships 
+between products and recommend the best one based on:
+1. VALUE: Price-to-performance ratio within the graph
+2. FEATURES: Technical superiority evident from feature nodes
+3. RATING: User satisfaction compared to connected products
+
+Provide compelling, data-driven reasoning leveraging the graph relationships. 
 Keep each reason under 50 words.
 
-JSON format:
+REQUIRED OUTPUT FORMAT (JSON):
 {
-  "best_product": "<exact name>",
+  "best_product": "<exact product name from graph>",
   "reasoning": [
-    "<specific feature/spec that stands out>",
-    "<price-to-performance comparison with numbers>",
-    "<unique selling point or rating insight>"
+    "<feature superiority from graph relationships>",
+    "<price-value comparison using graph edges>",
+    "<rating insight relative to competitive nodes>"
   ],
-  "alternatives": ["<exact name>", "<exact name>"]
+  "alternatives": ["<product name>", "<product name>"]
 }
 ```
 
@@ -402,28 +409,10 @@ Contributions welcome! Please follow:
 
 MIT License - see LICENSE file for details
 
-## 👥 Authors
-
-Your Name / Team Name
-
 ## 🐛 Known Issues
 
 - Large catalogs (>10,000 products) may require additional optimization
 - Image loading depends on SerpAPI rate limits
-
-## 🔮 Future Enhancements
-
-- [ ] User authentication and personalized recommendations
-- [ ] Collaborative filtering integration
-- [ ] Real-time recommendation updates
-- [ ] Multi-language support
-- [ ] Advanced filtering and sorting
-- [ ] Price tracking and alerts
-- [ ] Mobile app development
-
-## 📞 Support
-
-For issues or questions, please open a GitHub issue or contact [your-email@example.com]
 
 ---
 
