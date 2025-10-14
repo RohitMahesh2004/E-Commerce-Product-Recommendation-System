@@ -18,6 +18,11 @@ Build a hybrid recommendation system that not only suggests products based on us
 
 ## 🏗️ System Architecture
 
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/5bb33a9c-d681-4b52-9009-ffe3e5da38f8" alt="Diagram 1" width="48%"/>
+  <img src="https://github.com/user-attachments/assets/7f95b983-814f-457d-bfd2-26bc81eb0f21" alt="Diagram 2" width="48%"/>
+</p>
+
 ### Knowledge Graph RAG Pipeline
 
 1. **Catalog Ingestion**: Product catalogs (CSV/Excel) are uploaded and parsed
@@ -224,12 +229,14 @@ npm run dev
 
 4. Open browser at `http://localhost:3000`
 
-## 📊 Usage
+##  Usage
 
 ### 1. Search Amazon Products
 - Enter a product name in the search bar (e.g., "wireless earbuds")
 - View top recommendations with images, prices, and Amazon links
 - Click any product for AI-generated explanation
+  
+<img width="1470" height="801" alt="image" src="https://github.com/user-attachments/assets/57af21e0-4b43-49ed-8917-606eb26ef040" />
 
 ### 2. Upload Custom Catalog (Primary Feature)
 - Click or drag-and-drop CSV/Excel file with product data
@@ -241,10 +248,16 @@ npm run dev
   - Returns best recommendation with detailed reasoning
   - Suggests alternative products with images
 
+<img width="1470" height="728" alt="image" src="https://github.com/user-attachments/assets/11e1eb32-fc27-4c64-ba6c-70e4ab6db5ee" />
+
 ### 3. View LLM Recommendations
 - **Main Recommendation**: Displays product image, name, and key benefits
 - **Key Benefits**: 3 data-driven reasons explaining the recommendation
 - **Suggested Recommendations**: Alternative products with images (fetched via SerpAPI)
+
+<img width="1470" height="802" alt="image" src="https://github.com/user-attachments/assets/b50b4e38-ff1d-499a-b5aa-e01e39dbbdb6" />
+<img width="1470" height="801" alt="image" src="https://github.com/user-attachments/assets/9a11ee7b-b2f2-48d1-ac9f-dcb6af4498ab" />
+
 
 ### 4. Product Explanation (Search Results)
 - Click on any searched product from Amazon
@@ -285,7 +298,7 @@ The system uses **Gemini 2.5 Flash** with a **Knowledge Graph-enhanced RAG appro
 You are analyzing a product catalog through a knowledge graph representation. 
 The graph captures product entities, their attributes, feature relationships, 
 and competitive positioning.
-
+{context}  ----> Generated from kg_builder.py
 KNOWLEDGE GRAPH CONTEXT:
 ---
 Nodes (Products):
@@ -414,6 +427,3 @@ MIT License - see LICENSE file for details
 - Large catalogs (>10,000 products) may require additional optimization
 - Image loading depends on SerpAPI rate limits
 
----
-
-**Built with ❤️ using FastAPI, Next.js, and Gemini AI**
