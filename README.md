@@ -1,4 +1,4 @@
-# E-Commerce Product Recommender with LLM-Powered Explanations
+# E-Commerce Product Recommender
 
 An intelligent product recommendation system that combines traditional recommendation algorithms with Large Language Model (LLM) powered explanations, featuring a Knowledge Graph-based RAG (Retrieval-Augmented Generation) architecture.
 
