@@ -33,11 +33,11 @@ Build a hybrid recommendation system that not only suggests products based on us
 3. **Vector Embedding Generation**:
    - Each product and its metadata are converted into dense vector embeddings
    - Embeddings capture semantic meaning beyond keyword matching
-4. **LLM Fine-tuning Context**:
+4. **LLM  Context**:
    - The knowledge graph provides contextual grounding for the LLM
    - RAG architecture retrieves relevant product nodes before generation
 5. **Recommendation Generation**:
-   - Query embeddings are matched against the knowledge graph
+   - Query embeddings are matched against the knowledge graph and knowledge base
    - Top-k similar products are retrieved using vector similarity
    - LLM generates explanations based on retrieved context
 
